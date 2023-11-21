@@ -1,10 +1,13 @@
-/* src/components/Dashboard/Dashboard.css */
 .Dashboard {
     font-family: Arial, sans-serif;
     text-align: center;
     margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
   }
-  
+
+
   .containers {
     width: 80%;
     max-width: 800px;
@@ -28,7 +31,9 @@
     list-style: none;
     padding: 0;
   }
-  
+  .chartpie{
+    margin: 0;
+  }
   li {
     display: flex;
     justify-content: space-between;
@@ -40,7 +45,22 @@
   li:last-child {
     border-bottom: none;
   }
-  
+  .edit{
+    background-color: rgb(0, 140, 255);
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 20%;
+  }
+  .delete{
+    background-color: rgb(255, 0, 0);
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+  }
   button {
     background-color: #008CBA;
     color: white;
@@ -50,11 +70,9 @@
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #005a7f;
-  }
   
   .add-expense-button {
     margin-top: 20px;
+    margin-bottom: 25px;
   }
   

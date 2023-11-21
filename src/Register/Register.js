@@ -1,7 +1,11 @@
-// src/App.js
 import React, { useState } from 'react';
 import './Register.css'
+import axios from 'axios';
+import { useNavigate } from 'react-router';
+
 const Register = () => {
+  const url = "https://65588f65e93ca47020a97407.mockapi.io/users"
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -22,13 +26,11 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
 
-    // Clear the corresponding error when the user starts typing in a field
     setFormErrors({
       ...formErrors,
       [e.target.name]: '',
     });
 
-    // Validate confirm password when password changes
     if (e.target.name === 'password') {
       setFormErrors({
         ...formErrors,
@@ -58,63 +60,23 @@ const Register = () => {
     return '';
   };
 
-  const validateForm = () => {
-    let isValid = true;
-    const errors = {};
-
-    // Validate empty fields
-    Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        isValid = false;
-        errors[key] = 'This field is required';
-      }
-    });
-
-    // Validate password
-    errors.password = validatePassword(formData.password);
-
-    // Validate confirm password
-    errors.confirmPassword = validateConfirmPassword(
-      formData.confirmPassword,
-      formData.password
-    );
-
-    setFormErrors(errors);
-
-    return isValid;
-  };
+ 
+  const navigate = useNavigate();
 
   const handleSubmit = async(e) => {
-    const {username,email,password,confirmPassword} = formData;
     e.preventDefault();
-    const options = {
-      method :  'POST',
-      headers : {
-        'Content-Type':'aplication/json'
-      },
-      body : JSON.stringify({
-        username,email,password,confirmPassword
-      })
-    }
-    const res = await fetch(
-      'https://expense-8ff00-default-rtdb.firebaseio.com/userdata-json',
-      options
-    )
-
-    if (!validateForm() && res) {
-      alert('sent')
-      return;
-    }
-    else{
-      alert('error')
-    }
-  };
+    const data = {...formData}
+    setFormData(data)
+    await axios.post(url,data)
+    alert('account created successfully')
+     navigate('/')
+   };
 
   return (
     <div className="App">
       <div className="container">
       <h1>Register Account</h1>
-      <form onSubmit={handleSubmit}>
+      <form>
         <label>
           <input
           placeholder='Username'
@@ -181,7 +143,7 @@ const Register = () => {
           )}
         </label>
         <br />
-        <button type="submit">Register</button>
+        <button type="submit" className='registerbutton' onClick={handleSubmit}>Register</button>
       </form>
     </div>
     </div>

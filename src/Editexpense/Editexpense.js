@@ -1,26 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+import axios from 'axios';
 
 const EditExpense = () => {
+   const [editdata , seteditdata] = useState({})
+  const {index} = useParams();
+  const editinfo = useSelector((state) => state.expense)
+  const [editexpense, seteditexpense] = useState(editinfo)
+  const url = `https://65588f65e93ca47020a97407.mockapi.io/expense/${index}`
 
+  useEffect(() => {
+    async function editData() {
+      const list = await axios.get(url)
+    setExpense(list.data)
+    }
+    editData();
+  }, []);
 
   const [expense, setExpense] = useState({
     description: '',
     amount: '',
     date: '',
-    category: 'Category', 
+    category: '', 
   });
-
+  
+const navigate = useNavigate()
   const handleChange = (e) => {
     setExpense({
       ...expense,
       [e.target.name]: e.target.value,
     });
+    seteditexpense({
+      ...editexpense,
+      [e.target.name]:e.target.value,
+    })
   };
 
-  //const expenseinfo = useSelector((state) => state.expense)
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    const url =`https://65588f65e93ca47020a97407.mockapi.io/expense/${expense.id}`
+    await axios.put(url,expense)
+    navigate(-1)
   };
   
   return (

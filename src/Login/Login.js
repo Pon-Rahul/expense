@@ -1,15 +1,39 @@
-// src/components/Login/Login.js
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import './Login.css';
+import axios from 'axios';
+import { updatekey } from '../Redux/Action';
 
 const Login = () => {
+  const [loginEmail, setLoginEmail] = useState("")
+  const [loginPassword, setLoginPassword] = useState("")
 
+  const dispatch = useDispatch()
+
+    const eMailHandler = (event) => {
+      setLoginEmail(event.target.value)
+  }
+  const passWordHandler = (event) => {
+      setLoginPassword(event.target.value)
+  }
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Add your login logic here
-    console.log('Login form submitted');
+    const url = `https://65588f65e93ca47020a97407.mockapi.io/users?email=${loginEmail}`
+    const check = await axios.get(url) 
+    
+    if(check.data.length > 0 && check.data[0].password===loginPassword){
+      localStorage.setItem('uniqueid', JSON.stringify(check.data[0].id));
+      dispatch(updatekey(check.data[0].id))
+      navigate('/dashboard')
+    }
+    else{
+      alert("enter valid data")
+    }
+    setLoginEmail("")
+    setLoginPassword("")
   };
 
   return (
@@ -19,19 +43,19 @@ const Login = () => {
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
               <label>
-                <input placeholder='E-mail' type="text" name="E-mail" required />
+                <input placeholder='E-mail' type="text"onChange={eMailHandler}  />
               </label>
               <br />
               <label>
-                <input placeholder='Password' type="password" name="password" required />
+                <input placeholder='Password' type="password"onChange={passWordHandler}  />
               </label>
-              <div>
+              <div onClick={() => navigate("/forget")} className='forgetbutton'>
                 Forget Password ?
               </div>
               <br />
-              <button type="submit">Login</button>
+              <button type="submit" className='loginbutton'>Login</button>
             </form>
-              <button type="button" onClick={() => navigate("/register")}>
+              <button type="button"className='loginbutton' onClick={() => navigate("/register")}>
                 Register
               </button>
           </>

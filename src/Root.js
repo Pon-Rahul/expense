@@ -7,6 +7,8 @@ import History from "./History/History";
 import EditExpense from "./Editexpense/Editexpense";
 import Reports from "./Report/Report";
 import Dashboard from "./Dashboard/Dashboard";
+import ForgetPassword from "./Forget/Forgetpassword";
+import ChangePassword from "./Changepassword/Changepassword";
 const Root = () =>{
     return(
         <Routes>
@@ -16,7 +18,9 @@ const Root = () =>{
         <Route path="edit/:index" element={<EditExpense />}></Route>
         <Route path="history" element={<History />}></Route>
         <Route path="report" element={<Reports />}></Route> 
-        <Route path="dashboard" element={<Dashboard />}></Route> 
+        <Route path="dashboard" element={<Dashboard />}></Route>
+        <Route path="forget" element={<ForgetPassword />}></Route>
+        <Route path="change/:index" element={<ChangePassword />}></Route>
         </Routes>
     )
 }

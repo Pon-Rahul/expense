@@ -1,35 +1,44 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { saveexpense } from '../Redux/Action';
+import {  useSelector} from 'react-redux';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
+import Header from '../Header/Header';
+
 
 const AddExpense = () => {
-
+  const uniquekey = useSelector((state) => state.unique)
   const navigate = useNavigate()
-  const dispatch = useDispatch();
   const [expense, setExpense] = useState({
     description: '',
     amount: '',
     date: '',
-    category: 'Category',
+    category: 'food',
+    uniqueid:uniquekey
   });
-
+  
   const handleChange = (e) => {
+ 
     setExpense({
       ...expense,
       [e.target.name]: e.target.value,
     });
   };
 
-  //const expenseinfo = useSelector((state) => state.expense)
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
+    
+    const url ="https://65588f65e93ca47020a97407.mockapi.io/expense"
     e.preventDefault();
-    dispatch(saveexpense(expense))
-     navigate('/history')
+    const expensedata = {...expense}
+    setExpense(expensedata)
+    await axios.post(url,expensedata)
+    alert('Expense added')
+    navigate('/dashboard')
   };
   
   return (
+    <div>
+      <Header />
     <div className="AddExpense">
       <div className="container">
         <h1>Add Expense</h1>
@@ -68,7 +77,7 @@ const AddExpense = () => {
           </label>
           <br />
           <label>
-            <select name="select" value={expense.category} onChange={handleChange}>
+            <select name="category" value={expense.category} onChange={handleChange}>
 
               <option value="food">Food</option>
               <option value="travel">Travel</option>
@@ -76,9 +85,10 @@ const AddExpense = () => {
             </select>
           </label>
           <br />
-          <button type="submit">Add Expense</button>
+          <button type="submit" className='addbutton'>Add Expense</button>
         </form>
       </div>
+    </div>
     </div>
   );
 };
